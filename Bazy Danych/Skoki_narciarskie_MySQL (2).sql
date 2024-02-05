@@ -1,0 +1,358 @@
+﻿create database Skoki_narciarskie2022 DEFAULT CHARACTER SET utf8 COLLATE utf8_polish_ci;
+use Skoki_narciarskie2022;
+
+create table Kraje
+(
+	Id_kr int primary key,
+	Nazwa varchar(20) not null,
+	Stolica varchar(20),
+	Powierzchnia float
+);
+
+create table Skocznie
+(
+	Id_sk tinyint primary key,
+	Nazwa varchar(30) not null,
+	Miasto varchar(30) not null,
+	Pkt_k smallint, 
+	Pkt_HS smallint,
+	Id_kr int not null,
+	foreign key (Id_kr) references Kraje(Id_kr)
+);
+
+create table Terminarz
+(
+	Id_ter int primary key,
+	Id_sk tinyint not null,
+	foreign key (Id_sk)	references Skocznie(Id_sk),
+	Kiedy date not null	
+);
+
+create table Trenerzy
+(
+	Id_t int primary key,
+	Imie varchar(20) not null,
+	Nazwisko varchar(20) not null,
+	Id_kr int not null,
+	foreign key (Id_kr) references Kraje(Id_kr),
+	Id_kr_tr int,
+	unique (Id_kr_tr),
+	foreign key (Id_kr_tr)	references Kraje(Id_kr)
+);
+
+create table Skoczki
+(
+	Id_s int primary key,
+	Imie varchar(20) not null,
+	Nazwisko varchar(20) not null,
+	Wzrost smallint,
+	Waga float,
+	Data_ur date,
+	Id_kr int not null,
+	foreign key (Id_kr)	references Kraje(Id_kr)
+);
+
+create table Zawody
+(
+	Id_z int primary key AUTO_INCREMENT,
+	Id_ter int not null,
+	foreign key (Id_ter) references Terminarz (Id_ter),
+	Id_s int not null,
+	foreign key (Id_s) references Skoczki (Id_s),
+	Wynik1 float not null,
+	Pkt_1 float not null,
+	Wynik2 float,
+	Pkt_2 float
+);
+
+insert into Kraje (Id_kr, Nazwa, Stolica, Powierzchnia) values 
+(1,'Polska','Warszawa',312696),
+(2,'Finlandia','Helsinki',338145),
+(3,'Niemcy','Berlin',357578),
+(4,'Szwajcaria','Berno',41285),
+(5,'Austria','Wiedeń',83878.99),
+(6,'Japonia','Tokio',377972),
+(7,'USA','Waszyngton',9833520),
+(8,'Rumunia','Bukareszt',238391),
+(9,'Norwegia','Oslo',385207),
+(10,'Słowenia','Lublana',20273),
+(11,'Bułgaria','Sofia',NULL),
+(12,'Chiny','Pekin',NULL),
+(13,'Czechy','Praga',NULL),
+(14,'Estonia','Talin',NULL),
+(15,'Francja','Paryż',NULL),
+(16,'Kanada','Ottawa',NULL),
+(17,'Kazachstan','',NULL),
+(18,'Korea Płd.','',NULL),
+(19,'Rosja','Moskwa',NULL),
+(20,'Słowacja','Bratysława',NULL),
+(21,'Szwecja','Sztokholm',NULL),
+(22,'Turcja','Ankara',NULL),
+(23,'Ukraina','Kijów',NULL),
+(24,'Węgry','Budapeszt',NULL),
+(25,'Włochy','Rzym',NULL);
+
+insert into Skocznie (Id_sk, Nazwa, Miasto, Pkt_k, Pkt_HS, Id_kr) values
+(1,'im. Adama Małysza','Wisła',120,134,1),
+(2,'Rukatunturi','Ruka',120,142,2),
+(3,'Hochfirstschanze','Titisee-Neustadt',125,142,3),
+(4,'Gross-Titlis-Schanze','Engelberg',125,140,4),
+(5,'Schattenbergschanze','Obersdorf',120,137,3),
+(6,'Olympiaschanze','Garmisch-Partenkirchen',125,142,3),
+(7,'Bergisel','Innsbruck',120,128,5),
+(8,'im. Paula Ausserleitnera','Bischofshofen',125,142,5),
+(9,'Wielka Krokiew','Zakopane',125,140,1),
+(10,'Okurayama','Sapporo',123,137,6),
+(11,'Kulm-Skiflugschanze','Bad Mitterndorf',200,235,5),
+(12,'Mühlenkopfschanze','Willingen',130,147,3),
+(13,'MacKenzie Intervale','Lake Pacid',115,128,7),
+(14,'Trambulină Valea Cărbunării','Rasnov',90,97,8),
+(15,'Holmenkollbakken','Oslo',120,134,9),
+(16,'Lysgårdsbakken','Lillehammer',123,140,9),
+(17,'Vikersundbakken','Vikersund',200,240,9),
+(18,'Salpausselkä','Lahti',116,130,2),
+(19,'Letalnica bratov Gorišek','Planica',200,240,10);
+
+insert into Terminarz (Id_ter, Id_sk, Kiedy) values
+(1,1,'2022-11-05'),(2,1,'2022-11-06'),(3,2,'2022-11-26'),(4,2,'2022-11-27'),
+(5,3,'2022-12-09'),(6,3,'2022-12-10'),(7,3,'2022-12-11'),(8,4,'2022-12-17'),
+(9,4,'2022-12-18'),(10,5,'2022-12-29'),(11,6,'2023-01-01'),(12,7,'2023-01-04'),
+(13,8,'2023-01-06'),(14,9,'2023-01-14'),(15,9,'2023-01-15'),(16,10,'2023-01-20'),
+(17,10,'2023-01-21'),(18,10,'2023-01-22'),(19,11,'2023-01-28'),(20,11,'2023-01-29'),
+(21,12,'2023-02-03'),(22,12,'2023-02-04'),(23,12,'2023-02-05'),
+(24,13,'2023-02-11'),(25,13,'2023-02-11'),(26,13,'2023-02-12'),(27,14,'2023-02-18'),
+(28,14,'2023-02-19'),(29,15,'2023-03-11'),(30,15,'2023-03-12'),(31,16,'2023-03-14'),
+(32,16,'2023-03-16'),(33,17,'2023-03-18'),(34,17,'2023-03-19'),(35,18,'2023-03-25'),
+(36,18,'2023-03-26'),(37,19,'2023-03-31'),(38,19,'2023-04-01'),(39,19,'2023-04-02');
+
+insert into Trenerzy (Id_t, Imie, Nazwisko, Id_kr, Id_kr_tr) values 
+(1,'Thomas','Thurnbichler',5,1),
+(2,'Janne','Vaatainen',2,2),
+(3,'Stefan','Horngacher',5,3),
+(4,'Matjaz','Zupan',10,11),
+(5,'Vasja','Bajc',10,13),
+(6,'Jaan','Juris',14,14),
+(7,'David','Jiroutek',13,15),
+(8,'Hideharu','Miyahira',6,6),
+(9,'Janko','Zwitter',5,16),
+(10,'Nikita','Dewjatkin',17,17),
+(11,'Kim','Heung-soo',18,18),
+(12,'Alexander','Stoeckl',5,9),
+(13,'Jewgienij','Plechow',19,19),
+(14,'Cristinel Florin','Spulber',8,8),
+(15,'Jan','Tanczos',20,20),
+(16,'Robert','Hrgota',10,10),
+(17,'Norcic','Bine',10,7),
+(18,'Ronny','Hornschuh',3,4),
+(19,'Westman','Magnus',21,21),
+(20,'Frank','Nejc',10,22),
+(21,'Wołodymyr','Boszczuk',23,23),
+(22,'Andrea','Morassi',25,25);
+
+insert into Skoczki (Id_s, Imie, Nazwisko, Wzrost, Waga, Data_ur, Id_kr) values
+(1,'Dawid','Kubacki',180,NULL,'1990-03-12',1),
+(2,'Kamil','Stoch',173,NULL,'1987-05-25',1),
+(3,'Paweł','Wąsek',184,NULL,'1999-06-02',1),
+(4,'Jakub','Wolny',177,NULL,'1995-05-15',1),
+(5,'Piotr','Żyła',176,NULL,'1987-01-16',1),
+(6,'Jan','Habdas',NULL,NULL,'2003-12-02',1),
+(7,'Kacper','Jaroszek',NULL,NULL,'2001-06-05',1),
+(8,'Maciej','Kot',178,NULL,'1991-06-09',1),
+(9,'Tomasz','Pilch',170,NULL,'2000-10-20',1),
+(10,'Andrzej','Stękała',178,NULL,'1995-06-30',1),
+(11,'Aleksander','Zniszczoł',178,NULL,'1994-03-08',1),
+(12,'Stefan','Hula',174,NULL,'1986-09-29',1),
+(13,'Jarosław','Krzak',174,NULL,'2000-08-01',1),
+(14,'Klemens','Murańka',178,NULL,'1994-08-31',1),
+(15,'Antti','Aalto',183,NULL,'1995-04-02',2),
+(16,'Niko','Kytosaho',182,NULL,'1999-12-18',2),
+(17,'Arttu','Pohjola',163,NULL,'2001-06-07',2),
+(18,'Tuomas','Kinnunen',NULL,NULL,'2005-11-27',2),
+(19,'Markus','Eisenbichler',175,NULL,'1991-04-03',3),
+(20,'Severin','Freund',185,NULL,'1988-05-11',3),
+(21,'Karl','Geiger',183,NULL,'1993-02-11',3),
+(22,'Martin','Hamman',176,NULL,'1997-04-10',3),
+(23,'Stephan','Leyhe',178,NULL,'1992-01-05',3),
+(24,'Pius','Paschke',175,NULL,'1990-05-20',3),
+(25,'Constantin','Schmid',183,NULL,'1999-11-27',3),
+(26,'Andreas','Wellinger',183,NULL,'1995-08-28',3),
+(27,'Władimir','Zografski',165,NULL,'1993-07-14',11),
+(28,'Qiwu','Song',NULL,NULL,'2001-08-20',12),
+(29,'Zhe','Chen',NULL,NULL,'1993-03-09',12),
+(30,'Qihang','Cui',NULL,NULL,'2003-09-17',12),
+(31,'Xuyu','Huang',NULL,NULL,'2001-02-18',12),
+(32,'Xin','Liu',NULL,NULL,'2001-12-14',12),
+(33,'Ylxin','Lyu',NULL,NULL,'2000-05-15',12),
+(34,'Frantisek','Holik',178,NULL,'1998-10-23',13),
+(35,'Roman','Koudelka',170,NULL,'1989-07-09',13),
+(36,'Cestmir','Kozisek',185,NULL,'1991-11-09',13),
+(37,'Viktor','Polasek',172,NULL,'1997-07-18',13),
+(38,'Filip','Sakala',188,NULL,'1996-05-21',13),
+(39,'Killian','Peier',176,NULL,'1995-03-15', 4),
+(40,'Simon','Ammann',172,NULL,'1981-06-25', 4),
+(41,'Gregor','Deschwanden',185,NULL,'1991-02-27', 4),
+(42,'Dominik','Peter',172,NULL,'1995-08-28', 4),
+(43,'Sandro','Hauswirth',177,NULL,'2000-08-29', 4),
+(44,'Andreas','Schuler',183,NULL,'1995-12-30', 4),
+(45,'Philipp','Aschenwald',178,NULL,'1995-12-11', 5),
+(46,'Michael','Hayboeck',182,NULL,'1991-03-11', 5),
+(47,'Jan','Hoerl',168,NULL,'1998-10-16', 5),
+(48,'Daniel','Huber',182,NULL,'1991-03-11', 5),
+(49,'Stefan','Kraft',183, NULL,'1993-05-13', 5),
+(50,'Niklas','Bachlinger', NULL,NULL ,'2001-12-22', 5),
+(51,'Yumu','Harada',174,NULL,'1990-09-15', 6),
+(52,'Daiki','Ito',172,NULL,'1985-12-27', 6),
+(53,'Yuken','Iwasa',168,NULL,'1999-07-02', 6),
+(54,'Ryoyu','Kobayashi',174,NULL,'1996-08-11', 6),
+(55,'Naoki','Nakamura',175,NULL,'1996-09-19', 6),
+(56,'Ren','Nikaido',166,NULL,'2001-05-24', 6),
+(57,'Erik','Belshaw',NULL,NULL,'2004-08-23', 7),
+(58,'Kevin','Bickner',182,NULL,'1996-09-23', 7),
+(59,'Decker','Dean',NULL,NULL,'2000-08-08', 7),
+(60,'Patrick','Gasienca',NULL,NULL,'1998-11-28', 7),
+(61,'Casey','Larson',177,NULL,'1998-12-16', 7),
+(62,'Andrew','Urlaub',NULL,NULL,'2001-04-12', 7),
+(63,'Daniel','Cacina',190,NULL,'2001-10-17', 8),
+(64,'Andrei','Feldorean',NULL,NULL,'2000-04-13', 8),
+(65,'Moise','Folea',NULL,NULL,'2005-07-22', 8),
+(66,'Nicolae','Mitrofan',186,NULL,'1999-03-26', 8),
+(67,'Robert','Sandulescu',NULL,NULL,'2003-09-25', 8),
+(68,'Mihnea','Spulber',185,NULL,'2000-12-11', 8),
+(69,'Anders','Fannemel',165,NULL,'1991-05-13', 9),
+(70,'Johann','Forfang',176,NULL,'1995-07-04', 9),
+(71,'Halvor','Granerud',175,NULL,'1996-05-29', 9),
+(72,'Robert','Johansson',182,NULL,'1990-03-23', 9),
+(73,'Marius','Lindvik',NULL,NULL,'1998-06-27', 9),
+(74,'Thomas','Markeng',NULL,NULL,'2000-06-18', 9),
+(75,'Tilen','Bartol',175,NULL,'1997-04-17', 10),
+(76,'Ziga','Jelar',183,NULL,'1997-10-22', 10),
+(77,'Anze','Lanisek',175,NULL,'1996-04-20', 10),
+(78,'Bor','Pavlovcic',181,NULL,'1998-06-27', 10),
+(79,'Giovanni', 'Bresadola', 166, NULL, '2001-02-17',25),
+(80,'Alex', 'Insam', 182, NULL, '1997-02-19',25),
+(81,'Francesco', 'Cecon', NULL, NULL, '1997-12-09',25),
+(82,'Mattia','Galiani', NULL, NULL, '2002-05-05',25),
+(83,'Witalij','Kalinieczenko', NULL, NULL, '1993-09-08', 23),
+(84,'Anton','Korczuk', NULL, NULL, '2004-08-04', 23),
+(85,'Jewhen','Marusiak', 168, NULL, '2000-03-16',23),
+(86,'Andrij','Waskul', NULL, NULL, '1999-04-01', 23),
+(87,'Denis','Cwetkow', NULL, NULL, '2004-03-19', 23),
+(88,'Jurij','Janiuk', NULL, NULL, '2002-05-02', 23),
+(89,'Muhammed','Bedir', NULL, NULL, '2000-03-24', 22),
+(90,'Muhammet','Cintimar', NULL, NULL, '1997-07-16', 22),
+(91,'Muhammed','Gungen', NULL, NULL, '1998-08-24', 22),
+(92,'Fatih','Ipcioglu', 176, NULL, '1997-09-28', 22),
+(93,'Jonathan','Swedberg', NULL, NULL, '2002-08-23', 21),
+(94,'Erik','Kapias', NULL, NULL, '2004-01-22', 20),
+(95,'Marek','Badani', NULL, NULL, '2007-09-27', 20),
+(96,'Hektor','Kapustnik', NULL, NULL, '2007-04-27', 20),
+(97,'Jakub','Kapalnik', NULL, NULL, '2007-01-01', 20),
+(98,'Jewgienij','Klimow', 185, NULL, '1994-02-03', 19),
+(99,'Denis','Korniłow', 178, NULL, '1986-08-17', 19),
+(100,'Michaił','Maksimoczkin', 179, NULL, '1993-08-29', 19),
+(101,'Ilja','Mankow', NULL, NULL, '2003-03-17', 19),
+(102,'Michaił','Nazarow', 179, NULL, '1994-10-14', 19),
+(103,'Heung-Chul','Chaoi', 174, NULL, '1981-12-03', 18),
+(104,'Nikita','Dewjatkin', NULL, NULL, '1999-04-03', 17),
+(105,'Iłszat','Kadyrow', NULL, NULL, '2004-05-03', 17),
+(107,'Sabirżan', 'Muminow', 187, NULL, '1994-04-16', 17),
+(108,'Siergiej', 'Tkaczenko', 167, NULL, '1999-06-08', 17),
+(109,'Tursunżanow', 'Nurszat', NULL, NULL, '2003-02-08', 17),
+(110,'Boyd-Clowes', 'Mackenzie', 182, NULL, '1991-07-13', 16),
+(111,'Joshua', 'Maurer', NULL, NULL, '1996-09-20' , 16),
+(112,'Matthew', 'Soukup', 182, NULL, '1997-08-31' , 16),
+(113,'Alessamndro', 'Batby', NULL, NULL, '2001-11-20', 15),
+(114,'Mathis', 'Contamine', NULL, NULL, '2001-12-09', 15),
+(115,'Valentin', 'Foubert', 165, NULL, '2002-08-17', 15),
+(116,'Jonathan','Learoyd', 185, NULL, '2000-11-03', 15),
+(117, 'Jack', 'White', NULL, NULL, '2001-12-15', 15),
+(118, 'Artti', 'Aigro', 166, NULL, '1999-08-29', 14),
+(119, 'Kevin', 'Maltsev', 175, NULL, '2000-07-04', 14),
+(120, 'Daniel Andre', 'Tande', 182, NULL, '1994-01-24', 9),
+(121, 'Manuel', 'Fettner', null, null, null, 5),
+(122, 'Timi', 'Zajc', null, null, null, 10),
+(125, 'Peter', 'Prevc', null, null, null, 10),
+(126, 'Domen', 'Prevc', null, null, null, 10),
+(127, 'Philipp', 'Raimund',  null, null, null, 3),
+(128, 'Daniel', 'Tschofenig', null, null, null, 5),
+(129, 'Lovro', 'Kos', null, null, null, 10),
+(130, 'Kristoffer Eriksen','Sundal', null, null, null, 9),
+(131, 'Eetu','Nousiainen', null, null, null, 2),
+(133, 'Yukiya','Sato', null, null, null, 6),
+(134, 'Fredrik', 'Villumstad', null, null, null, 9),
+(135, 'Danil', 'Vassilyev', null, null, null, 17),
+(136, 'Keiichi', 'Sato', null, null, null, 2),
+(137, 'Vilho', 'Palosaari', null, null, null, 2),
+(138, 'Junshiro', 'Kobayashi', null, null, null, 6);
+
+insert into Zawody (Id_ter, Id_s, Wynik1, Pkt_1,Wynik2,Pkt_2) values
+(1,1,130.5,130.8,132.5,139.7),(1,71,130,127.8,133.5,138.8),(1,49,125,124.5,133.5,133.5),(1,5,129,121.5,127,128.5),(1,125,121.5,120.6,118.5,112),(1,25,129.5,119.9,118.5,113.2),(1,128,122,119,121.5,123.2),(1,121,123,118.9,129,133.5),(1,3,124.5,117.9,121,116.5),(1,73,120.5,117.8,136.5,109.2),(1,24,122.5,117.1,122,119.5),
+(1,79,125.5,117,118.5,100.9),(1,2,127.5,116.3,116,111),(1,70,126,116.1,116,122.6),(1,130,126,115.9,123.5,115.1),(1,56,125,114.9,123,95.1),(1,19,123.5,114.6,127.5,121.8),(1,45,123.5,114.4,127.5,125.4),(1,118,125,112.9,118.5,105),(1,138,121.5,112.6,124.5,117.8),
+(1,9,125.5,109.9,120,111.3),(1,54,119,109.4,128.5,131.1),(1,77,117,109.2,115,110.6),(1,134,119.5,109.1,122.5,118.5),(1,12,118.5,109,113,101.8),(1,72,116.5,108.3,131.5,128.6),(1,135,118,108.2,113.5,95.5),(1,55,120,107.9,114,94.9),(1,122,117,106.3,126.5,123.4),(1,26,117.5,105.9,124.5,115.3),(1,11,120,105.7,null,null),
+(1,133,120,105.4,null,null),(1,129,120.5,104.8,null,null),(1,6,117.5,104,null,null),(1,21,115,104,null,null),(1,4,117,103.4,null,null),(1,48,116.5,103.1,null,null),(1,120,114,102.1,null,null),(1,127,117,99.8,null,null),(1,136,117.5,99.8,null,null),(1,46,112,99.6,null,null),(1,41,116.5,98.3,null,null),
+(1,76,115.5,94.7,null,null),(1,80,113,93.7,null,null),(1,27,113.5,93,null,null),(1,15,108,89.7,null,null),(1,92,103,79.8,null,null),(1,126,105.5,77.4,null,null),(1,137,92.5,56.3,null,null),(1,35,89.5,49.1,null,null);
+
+insert into Zawody (Id_ter, Id_s, Wynik1, Pkt_1,Wynik2,Pkt_2) values
+(2,1,131,143.1,133.5,143.9),(2,77,131.5,141.9,131,136.8),(2,73,131,136.9,133.5,140.1),(2,71,128,135.0,133,137.6),(2,49,126,133.9,132.0,138.8),(2,47,131.0,135.1,131.5,136.9),(2,120,127.5,133.7,130.0,135.1),
+(2,5,125.5,129.1,130.5,138.6),(2,121,127.0,133.4,129.0,130.3),(2,122,134.8,133.4,127.0,128.6),(2,55,127.5,132.9,127.0,129.2),(2,45,123.5,127.7,126.5,130.4),(2,72,126.0,127.7,126.5,129.9),
+(2,70,124.5,128.3,127.5,129.0),(2,24,125.0,125.9,126.5,131.2),(2,125,128.0,128.2,126.5,128.3),(2,21,129.0,130.7,125.5,125.7),(2,126,125.0,128.2,125.5,126.7),(2,127,125.0,127.5,125.0,125.3),
+(2,19,124.0,123.8,124.5,126.6),(2,27,123.5,125.8,125.0,124.0),(2,3,125.0,124.9,123.5,124.2),(2,46,124.0,123.8,122.5,124.3),(2,128,123.0,124.7,122.5,123.2),(2,26,123.5,125.2,123.0,122.5),
+(2,25,124.0,121.7,121.0,125.0),(2,79,123.5,122.5,120.0,120.4),(2,129,124.0,122.6,120.0,119.8),(2,130,123.5,122.7,118.0,114.2),(2,54,128.5,137.6,null,null),(2,7,121.0,120.1,null,null),
+(2,15,122.5,119.4,null,null),(2,16,121.5,118.9,null,null),(2,6,118.5,117.9,null,null),(2,80,120.0,117.7,null,null),(2,131,121.0,117.7,null,null),(2,12,118.5,116.1,null,null),(2,133,119.5,115.9,null,null),
+(2,8,116.5,115.1,null,null),(2,76,121.5,114.4,null,null),(2,118,119.5,114.3,null,null),(2,134,119.5,113.8,null,null),(2,135,117.0,111.9,null,null),(2,11,118.5,111.4,null,null),(2,136,114.5,110.6,null,null),
+(2,92,117.0,110.1,null,null),(2,41,117.0,108.7,null,null),(2,137,116.5,106.3,null,null),(2,8,113.0,99.8,null,null);
+
+insert into Zawody (Id_ter, Id_s, Wynik1, Pkt_1,Wynik2,Pkt_2) values
+(4,49,140.0,150.2,147.0,154.3),(4,71,139.0,149.9,145.0,154.6),(4,55,144.0,151.2,139.5,143.7),(4,77,145.0,154.8,139.0,139.8),(4,5,138.0,144.4,139.0,139.7),(4,1,145.5,155.8,130.0,122.9),(4,26,133.5,129.6,143.0,148.2),
+(4,128,138.5,143.9,134.0,132.3),(4,24,132.5,134.3,139.5,141.9),(4,19,137.5,141.0,136.0,134.0),(4,121,141.0,148.1,134.0,125.7),(4,47,133.0,131.2,138.0,141.1),(4,46,138.0,136.8,134.5,133.1),(4,2,129.0,124.3,139.0,145.0),
+(4,125,125.5,122.4,142.5,145.4),(4,72,137.0,136.9,133.5,130.6),(4,120,136.5,136.7,133.0,127.8),(4,79,129.0,121.7,137.5,136.2),(4,133,129.5,119.7,135.5,133.4),(4,73,132.5,123.5,132.0,127.9),(4,25,133.5,132.1,124.0,114.0),
+(4,122,130.5,126.3,129.0,118.2),(4,54,134.0,130.0,126.0,112.8),(4,129,132.5,125.4,127.0,115.1),(4,16,130.5,123.6,127.5,114.1),(4,15,133.0,121.6,125.0,111.7),(4,45,123.5,112.9,123.5,116.6),(4,3,130.0,118.0,117.0,99.7),
+(4,126,128.0,116.3,111.0,86.8),(4,27,125.5,117.5,109.5,81.6),(4,41,123.0,111.8,null,null),(4,23,123.5,111.4,null,null),(4,21,122.5,110.9,null,null),(4,110,124.5,109.2,null,null),(4,138,122.0,108.0,null,null),
+(4,59,123.5,107.5,null,null),(4,80,120.0,105.0,null,null),(4,4,122.0,103.4,null,null),(4,4,122.0,103.4,null,null),(4,11,120.0,103.0,null,null),(4,76,119.5,99.2,null,null),(4,137,115.0,87.8,null,null),
+(4,42,109.5,79.3,null,null),(4,131,100.5,61.7,null,null),(4,9,100.0,58.9,null,null),(4,61,89.5,55.1,null,null),(4,136,92.0,44.1,null,null),(4,130,88.0,41.0,null,null),(4,107,80.0,27.9,null,null),
+(4,81,73.5,8.5,null,null);
+
+
+insert into Skoczki (Id_s, Imie, Nazwisko, Wzrost, Waga, Data_ur, Id_kr) values
+(140,'Bendick','Heggli',NULL, NULL,'2001-10-14',9),
+(141,'Lukas','Mueller',NULL,NULL,'2002-07-17',5);
+
+insert into Zawody (Id_ter, Id_s, Wynik1, Pkt_1,Wynik2,Pkt_2) values
+(8,77,139.5,163.6,142.0,156.7),(8,1,139,164.1,149,152.9),(8,5,141.0,155.9,139,156.4),(8,49,136.5,153.4,138,154),
+(8,71,134.5,148.4,141,152.2),(8,26,137,144.6,139,150.5),(8,47,141,149.9,134,144.2),(8,2,130,146,135.5,141.8),
+(8,122,131.5,144.8,133.5,142),(8,54,134.5,146.1,134.5,138.6),(8,24,128,142.2,133,137),(8,76,136,143.6,132,135.3),
+(8,72,124,138.9,137,139.8),(8,121,125,127.8,139.5,147.3),(8,73,123.5,137.5,134,137.4),(8,126,135,139.1,132.5,135.7),
+(8,128,127.5,138.9,134.5,135.8),(8,23,134.5,145.6,128.5,128.1),(8,129,133,136.5,131.5,136.7),(8,79,136.5,142.2,129.5,130.9),
+(8,55,129,137.6,130.5,133.2),(8,21,124,135.5,129.5,135.1),(8,3,136,141.2,129.5,129),(8,45,128.5,128.3,131.7,131.7),
+(8,15,134.5,135.5,123,123.3),(8,125,124,134.8,124,123.5),(8,19,121,125.6,129.5,132.4),(8,70,126.5,129.4,119.5,132.4),
+(8,130,133.5,135.7,118,109.7),(8,80,128,126.4,118,105.8),(8,25,122.5,125,NULL,NULL),(8,138,129,124.7,NULL,NULL),
+(8,16,126.5,124.6,NULL,NULL),(8,141,126,123.5,NULL,NULL),(8,133,128,122.3,NULL,NULL),(8,36,124,121.8,NULL,NULL),
+(8,110,122,121.6,NULL,NULL),(8,57,121.5,121,NULL,NULL),(8,46,115.5,120,NULL,NULL),(8,136,122,120,NULL,NULL),
+(8,27,123,119.9,NULL,NULL),(8,81,123,119.7,NULL,NULL),(8,39,123,119.7,NULL,NULL),(8,42,119.5,119.5,NULL,NULL),
+(8,140,124,117.7,NULL,NULL),(8,11,118.5,114.3,NULL,NULL),(8,59,120,113,NULL,NULL),(8,56,121,112.9,NULL,NULL),
+(8,4,120.5,112.1,NULL,NULL),(8,135,119,111.3,NULL,NULL);
+
+insert into Zawody (Id_ter, Id_s, Wynik1, Pkt_1,Wynik2,Pkt_2) values
+(9,1,141.5,157.4,135.5,143),(9,121,138,150.7,138,146.5),(9,77,135,145.5,142,148.2),(9,71,135,148.6,137.5,144.5),(9,5,139.5,150.1,134,142.2),
+(9,49,135,149.1,130,134.2),(9,46,138,141,137,139.2),(9,79,132.5,137.7,134,134),(9,72,137.5,141.7,129,124.4),(9,21,140,127.9,136.5,137.7),
+(9,129,131.5,136.7,131.5,126.8),(9,73,137,138,130,124.7),(9,125,127.5,130.9,131,127.2),(9,24,133.5,136.3,129,121.7),(9,47,120.5,121.6,133.5,131),
+(9,76,133,133.8,128,123.1),(9,128,123.5,123.5,131,126.6),(9,45,129,125.7,128.5,124.1),(9,26,127,125.6,125,117.5),(9,25,127.5,127.1,125,114.5),
+(9,126,123,119.7,128,119.9),(9,23,129,129.3,123,109.8),(9,16,125,122,125.5,113.2),(9,57,123,121.4,117.5,108.6),(9,41,124.5,120.4,119.5,109),
+(9,130,126,120.3,121,109.1),(9,141,126,125.1,116.5,99.8),(9,140,126,125.2,114,98.5),(9,27,126.5,121.7,120.5,99.3),(9,19,123,120.6,114,95.7),
+(9,54,123,118.3,null,null),(9,70,120,113.4,null,null),(9,122,118.5,113,null,null),(9,119,122,111.6,null,null),(9,80,120,108.2,null,null),
+(9,55,117,107.7,null,null),(9,11,119.5,103.5,null,null),(9,138,115.5,103.2,null,null),(9,2,117.5,101.8,null,null),(9,81,114,101.2,null,null),
+(9,135,118.5,99.1,null,null),(9,42,107.5,96.9,null,null),(9,136,110,93.1,null,null),(9,133,112.5,93.1,null,null),(9,39,109,92.7,null,null),
+(9,110,110.5,92.7,null,null),(9,56,113.5,92.3,null,null),(9,107,110.5,91.7,null,null),(9,59,105,88,null,null),(9,4,105.5,82.2,null,null);
+
+insert into Skoczki values (142, 'Clemens', 'Leitner', 183, NULL, '1998-11-07', 5);
+insert into Zawody (Id_ter, Id_s, Wynik1, Pkt_1,Wynik2,Pkt_2) values
+(10,71,142.5,151.5,139.0,160.9),(10,5,132.5,146.9,137.0,152.1),(10,1,140.5,145.9,136.0,149.0),(10,4,136.5,142.0,134.0,151.6),(10,49,133.5,139.2,138.0,152.8),
+(10,26,135.0,144.5,132.0,144.7),(10,129,125.5,134.1,133.5,146.6),(10,128,122.5,133.5,132.5,145.3),(10,2,133.0,139.7,130.0,136.4),(10,77,119.5,125.2,129.0,142.2),
+(10,70,122.0,121.4,131.0,143.4),(10,46,121.5,131.2,124.0,130.9),(10,121,119.0,124.0,127.0,136.3),(10,127,118.5,123.9,124.0,133.1),(10,54,124.5,132.4,120.5,124.2),
+(10,47,120.5,121.3,126.0,130.3),(10,73,121.0,124.1,122.0,124.3),(10,122,120.5,117.9,121.0,130.0),(10,3,121.5,123.6,118.5,121.6),(10,23,122.0,123.7,116.5,120.4),
+(10,27,127.5,126.7,115.5,117.0),(10,125,119.0,121.9,118.0,121.5),(10,45,119.5,120.6,121.5,122.2),(10,130,119.0,119.1,117.5,119.1),(10,72,113.5,114.7,119.0,120.9),
+(10,57,124.5,121.9,113.5,109.5),(10,120,120.0,117.0,112.0,113.7),(10,76,114.0,111.5,118.5,115.6),(10,25,111.5,105.1,122.0,119.1),(10,92,117.0,115.4,104.5,97.7),
+(10,59,114.0,113.3,NULL,NULL),(10,79,118.5,112.8,NULL,NULL),(10,19,115.0,112.3,NULL,NULL),(10,137,113.5,110.9,NULL,NULL),(10,81,112.5,107.5,NULL,NULL),
+(10,142,109.0,107.5,NULL,NULL),(10,41,107.5,106.4,NULL,NULL),(10,15,112.5,106.2,NULL,NULL),(10,126,109.5,105.3,NULL,NULL),(10,56,116.0,104.8,NULL,NULL),
+(10,24,110.0,100.6,NULL,NULL),(10,118,108,98.4,NULL,NULL),(10,69,106.0,97.5,NULL,NULL),(10,35,109.5,96.9,NULL,NULL),(10,133,105.0,95.1,NULL,NULL),
+(10,80,102.5,92.4,NULL,NULL),(10,89,108.5,91.4,NULL,NULL),(10,12,108.0,91.1,NULL,NULL),(10,6,105.5,89.2,NULL,NULL),(10,138,107.5,88.1,NULL,NULL);
