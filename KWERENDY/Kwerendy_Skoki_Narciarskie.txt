@@ -1,0 +1,23 @@
+1.Wyświetl wszystkie kraje oraz skoczków przypisanych do krajów.
+SELECT kraje.Nazwa, skoczki.Imie, skoczki.Nazwisko FROM kraje left join skoczki on kraje.Id_kr=skoczki.Id_kr GROUP BY kraje.Nazwa;
+
+2.Wyświetl kraje bez skoczków.
+SELECT kraje.Nazwa, count(skoczki.Nazwisko) FROM kraje left join skoczki on kraje.Id_kr=skoczki.Id_kr WHERE skoczki.Nazwisko is null GROUP BY nazwa;
+
+3.Wyświetl kraje i sume punktow skoczków z danego kraju z dnia 2022-11-05.
+SELECT kraje.Nazwa, sum(zawody.Pkt_1 + zawody.Pkt_2) as 'pkt' FROM kraje join skoczki on kraje.Id_kr=skoczki.Id_kr join zawody on skoczki.Id_s=zawody.Id_s join terminarz on zawody.Id_ter=terminarz.Id_ter WHERE terminarz.Kiedy = "2022-11-05" GROUP BY kraje.Nazwa ORDER BY kraje.Nazwa asc;
+
+4.Pokaż trenerów skoczków którzy byli top 1 w zawodach w jakimś roku w jakimś terminie
+SELECT trenerzy.Imie, trenerzy.Nazwisko, skoczki.Imie, skoczki.Nazwisko, zawody.Pkt_1+zawody.Pkt_2 FROM skoczki join kraje on skoczki.Id_kr=kraje.Id_kr join trenerzy on kraje.Id_kr=trenerzy.Id_kr join zawody on zawody.Id_s=skoczki.Id_s JOIN terminarz on terminarz.Id_ter=zawody.Id_ter WHERE terminarz.Kiedy="2022-11-05" GROUP BY zawody.Pkt_1+zawody.Pkt_2 ORDER BY 5 desc limit 1;
+
+5.Pokaż wage zawodnika ze Słoweni z turnieju z daty
+SELECT skoczki.Imie, skoczki.Nazwisko, skoczki.Waga, kraje.Nazwa FROM skoczki join kraje on skoczki.Id_kr=kraje.Id_kr join zawody on skoczki.Id_s=zawody.Id_s join terminarz on zawody.Id_ter=terminarz.Id_ter WHERE kraje.Nazwa="Słowenia" AND terminarz.Kiedy="2022-11-27";
+
+6.Pokaż gościa z najgorszym wynikiem i jaki kraj reprezentuje
+SELECT skoczki.Imie, skoczki.Nazwisko, kraje.Nazwa, sum(zawody.Pkt_1+zawody.Pkt_2) FROM skoczki join kraje on skoczki.Id_kr=kraje.Id_kr join zawody on skoczki.Id_s=zawody.Id_s GROUP BY skoczki.Nazwisko ORDER BY 4 asc;
+
+7.Update wszystkie null na 0.
+update zawody set wynik2=0,pkt_2=0 where wynik2 is null or pkt_2 is null;
+
+8.Ile metrów i kto przelecial w obu seriach razem
+select skoczki.imie, skoczki.Nazwisko, avg(zawody.Wynik1 + zawody.Wynik2) from skoczki join zawody on skoczki.Id_s=zawody.Id_s group by 1 order by 3 desc;

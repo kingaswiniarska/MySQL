@@ -1,0 +1,21 @@
+1.Wyświetl miasta, z których jest ponad 5 kierowców i policz ile w każdym mieście ich jest. 
+SELECT kierowca.miasto, COUNT(kierowca.miasto) FROM kierowca GROUP BY miasto HAVING COUNT(kierowca.miasto) > 5;
+
+2.Jakie jest średnie spalanie każdej marki, która wypada w bazie więcej niż jeden raz?
+SELECT samochody.marka, COUNT(samochody.marka), avg(samochody.spalanie) FROM samochody GROUP BY samochody.marka HAVING COUNT(samochody.marka) > 1 ORDER BY 2 desc; 
+
+3.Policz i wyświetl alfabetycznie marki samochodów, w których 2 litera to "o" 
+SELECT samochody.marka, COUNT(samochody.marka) FROM samochody WHERE samochody.marka LIKE '_%o%o%' GROUP BY marka order by marka asc;  <--- sa dwie litery o
+SELECT samochody.marka, COUNT(samochody.marka) FROM samochody WHERE samochody.marka LIKE '_o%' GROUP BY marka order by marka asc; <--- 2 litera to o
+
+4.Ilu kierowców w każdym mieście mieszka na ulicy Głównej? 
+SELECT samochody.marka, COUNT(samochody.marka), avg(samochody.spalanie) FROM samochody WHERE marka like 'Główna%'GROUP BY samochody.marka HAVING COUNT(samochody.marka) > 1 ORDER BY 2 desc;
+
+5.Wyświetl alfabetycznie imiona kierowców, które w bazie występują jeden raz.
+SELECT kierowca.imie, COUNT(kierowca.imie) FROM kierowca GROUP BY kierowca.imie HAVING COUNT(kierowca.imie) = 1 ORDER BY kierowca.imie asc; 
+
+6.Znajdź 2 imiona kierowców, które w bazie wypadają najwięcej razy i wyświetl ile ich jest.
+SELECT kierowca.imie, COUNT(kierowca.imie) FROM kierowca GROUP BY kierowca.imie ORDER BY 2 desc limit 2; 
+
+7.Oblicz ilość oraz średnie spalanie czarnych i osobno białych samochodów wyprodukowanych po 2000 roku, palących poniżej 8. (Kolor, ilość, średnia) 
+SELECT samochody.kolor, COUNT(samochody.id_s), avg(samochody.spalanie) FROM samochody WHERE kolor="czarny" or kolor="biały" AND samochody.rocznik > 2000 GROUP BY kolor having avg(samochody.spalanie) < 8;

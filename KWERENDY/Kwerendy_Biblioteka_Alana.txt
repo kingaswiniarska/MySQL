@@ -1,0 +1,20 @@
+1.Podaj autorów bez książek
+SELECT autorzy.Imie, autorzy.Nazwisko, ksiazki.Tytul FROM autorzy left join ksiazki on autorzy.Nr_a=ksiazki.Nr_a WHERE ksiazki.Tytul is null ORDER BY 1 asc;
+
+2.Podaj książki z autorami
+SELECT ksiazki.Tytul, autorzy.Nazwisko FROM autorzy join ksiazki on autorzy.Nr_a=ksiazki.Nr_a GROUP BY ksiazki.Tytul ORDER BY 1 asc;
+
+3.Kto ile książek wypożyczył
+Select klienci.nr_kl, imie, nazwisko, count(nr_wyp) from wypozyczenia join ksiazki on wypozyczenia.Nr_ks=ksiazki.Nr_ks join klienci on klienci.Nr_kl=wypozyczenia.Nr_kl where data_odd is null group by nr_kl order by 4 desc;
+
+4.Kto wypożyczył najwiecej książek
+SELECT klienci.Imie, klienci.Nazwisko, count(wypozyczenia.Data_wyp) FROM wypozyczenia left join klienci on wypozyczenia.Nr_kl=klienci.Nr_kl GROUP BY klienci.Nazwisko ORDER BY 3 desc limit 1;
+
+5.Kto wypożyczył najmniej książek
+SELECT klienci.Imie, klienci.Nazwisko, count(wypozyczenia.Data_wyp) FROM wypozyczenia left join klienci on wypozyczenia.Nr_kl=klienci.Nr_kl GROUP BY klienci.Nazwisko ORDER BY 3 asc limit 1;
+
+6.Ile osób z Warszawy wypożyczyło książke
+SELECT count(klienci.Miasto) FROM klienci join wypozyczenia on klienci.Nr_kl=wypozyczenia.Nr_kl join ksiazki on ksiazki.Nr_ks=wypozyczenia.Nr_ks join autorzy on ksiazki.Nr_a=autorzy.Nr_a WHERE klienci.Miasto="Warszawa";
+
+7.Kto wygrał konkur biblioteczny - kto najwięcej wypożyczył i oddał książek (zakładamy, że przeczytał ten kto ją oddał)
+Select klienci.nr_kl,imie,nazwisko, COUNT(wypozyczenia.nr_ks)from wypozyczenia join klienci on klienci.Nr_kl=wypozyczenia.Nr_kl join ksiazki on ksiazki.Nr_ks=wypozyczenia.Nr_ks where Data_odd is not null group by klienci.nr_kl order by 4 desc; 

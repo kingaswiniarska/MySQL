@@ -1,0 +1,24 @@
+1.Pokaż trenerów trzech drużyn, które są pierwsze w tabeli pod względem punktów.
+SELECT trenerzy.Imie, trenerzy.Nazwisko, druzyny.Nazwa, sum(mecze.Wynik1+mecze.Wynik2) FROM trenerzy join druzyny on trenerzy.Id_t=druzyny.Id_t  join mecze on druzyny.Id_d GROUP BY druzyny.Nazwa ORDER BY 4 desc;
+
+2.Pokaż składy drużyn i kto na jakiej pozycji gra
+Select druzyny.Nazwa, pozycje.nazwa, imie, nazwisko from gracze join druzyny on gracze.id_d=druzyny.id_d join pozycje on gracze.id_p=pozycje.id_p order by 1 asc;
+
+3.Średnia wzrostu -3 najwyższe drużyny
+Select druzyny.Nazwa, avg(gracze.Wzrost) from gracze join druzyny on gracze.id_d=druzyny.Id_d GROUP by druzyny.Nazwa order by 2 desc limit 3;
+
+3.Maksymalny wzrost w każdej drużynie
+Select druzyny.Nazwa, max(gracze.Wzrost) from gracze join druzyny on gracze.id_d=druzyny.Id_d GROUP by druzyny.Nazwa order by 2 desc;
+
+4.Maksymalny wzrost na każdej pozycji w każdej drużynie
+Select druzyny.Nazwa,pozycje.nazwa, max(gracze.Wzrost) from gracze join druzyny on gracze.id_d=druzyny.Id_d join pozycje on gracze.id_p=pozycje.id_p GROUP by 1,2;
+
+5.Wyświetlić trenerów bez drużyn/drużyny bez trenerów
+Select trenerzy.imie, trenerzy.Nazwisko, druzyny.nazwa from trenerzy join druzyny on trenerzy.id_t=druzyny.Id_t;
+
+Select trenerzy.imie, trenerzy.Nazwisko, druzyny.nazwa from trenerzy left join druzyny on trenerzy.id_t=druzyny.Id_t where druzyny.Nazwa is null;
+
+Select trenerzy.imie, trenerzy.Nazwisko, druzyny.nazwa from trenerzy LEFT join druzyny on trenerzy.id_t=druzyny.Id_t where druzyny.id_t is null UNION select trenerzy.imie, trenerzy.Nazwisko, druzyny.nazwa from trenerzy RIGHT join druzyny on trenerzy.id_t=druzyny.Id_t where druzyny.id_t is null;
+
+6.Drużny które mają wiecej niż jednego libera
+Select druzyny.nazwa, COUNT(pozycje.nazwa) from gracze join pozycje on gracze.Id_p=pozycje.Id_p join druzyny on gracze.Id_d=druzyny.Id_d where pozycje.nazwa="libero" group by 1 having COUNT(pozycje.nazwa)>1 order by 1 desc;
